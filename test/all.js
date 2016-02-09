@@ -8,8 +8,9 @@ var settings = require('../lib/settings.js')
 var registry = require('../index.js')
 var BinderRegistry = registry.server
 
+var templateName = 'binder-registry-test-template'
 var sampleTemplate = {
-  'name': 'binder-example-requirements',
+  'name': templateName,
   'image-name': 'binder-project/example-requirements',
   'image-source': 'gcr.io/generic-notebooks/binder-project-example-requirements',
   'limits': {
@@ -60,7 +61,6 @@ describe('binder-registry', function () {
       }
       request(opts, function (err, rsp, body) {
         if (err) throw err
-        console.log('rsp: ' + JSON.stringify(rsp))
         assert(body['time-created'])
         assert(body['time-modified'])
         assert(body['name'])
@@ -69,7 +69,7 @@ describe('binder-registry', function () {
     })
     it('should return a registered template', function (done) {
       var opts = {
-        url: urljoin(baseUrl, 'templates', 'binder-example-requirements'),
+        url: urljoin(baseUrl, 'templates', templateName),
         method: 'GET',
         headers: {
           'Authorization': apiKey
@@ -78,7 +78,7 @@ describe('binder-registry', function () {
       }
       request(opts, function (err, rsp, body) {
         if (err) throw err
-        assert.equal(body['name'], 'binder-example-requirements')
+        assert.equal(body['name'], templateName)
         done()
       })
     })
@@ -93,8 +93,8 @@ describe('binder-registry', function () {
       }
       request(opts, function (err, rsp, body) {
         if (err) throw err
-        assert.notEqual(body['name'], 'binder-example-requirements')
-        assert.equal(body, {})
+        assert.notEqual(body['name'], templateName)
+        assert.deepEqual(body, {})
         done()
       })
     })
