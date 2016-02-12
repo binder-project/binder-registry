@@ -57,7 +57,7 @@ describe('binder-registry', function () {
           'Authorization': apiKey
         },
         json: true,
-        body: sampleTemplate
+        body: { template: sampleTemplate }
       }
       request(opts, function (err, rsp, body) {
         if (err) throw err
